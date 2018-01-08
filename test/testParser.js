@@ -2,7 +2,6 @@ const src=function(filePath){return "../src/"+filePath};
 const errors=function(filePath){return "../src/errors/"+filePath};
 
 const chai = require('chai').assert;
-const assert=require('assert');
 const Parser=require(src('index.js')).Parser;
 const MissingValueError=require(errors('missingValueError.js'));
 const MissingEndQuoteError=require(errors('missingEndQuoteError.js'));
@@ -196,20 +195,6 @@ describe("mixed values with both quotes and without",function(){
     chai.deepInclude(expected,kvParser.parse("anotherkey=\"anothervalue\" key=value"));
   });
 });
-
-const errorChecker=function(key,pos,typeOfError) {
-    return function(err) {
-      if(err instanceof typeOfError && err.key==key && err.position==pos)
-        return true;
-      return false;
-    }
-}
-
-const checkErrorDetails = function(key,pos,message) {
-  return function(err){
-    return err.message == message && err.key==key && err.position==pos
-  }
-}
 
 describe("error handling",function(){
   beforeEach(function(){
