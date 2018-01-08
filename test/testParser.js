@@ -173,22 +173,22 @@ describe("multiple values with quotes",function(){
 describe("mixed values with both quotes and without",function(){
   it("parse simple values with and without quotes",function(){
     let expected={key:"value",anotherkey:"anothervalue"};
-    assert.deepEqual(expected,kvParser.parse("key=value anotherkey=\"anothervalue\""));
+    chai.deepInclude(expected,kvParser.parse("key=value anotherkey=\"anothervalue\""));
   });
 
   it("parse simple values with and without quotes and leading spaces on keys",function(){
     let expected={key:"value",anotherkey:"anothervalue"};
-    assert.deepEqual(expected,kvParser.parse("   key=value anotherkey=\"anothervalue\""));
+    chai.deepInclude(expected,kvParser.parse("   key=value anotherkey=\"anothervalue\""));
   });
 
   it("parse simple values with and without quotes and trailing spaces on keys",function(){
     let expected={key:"value",anotherkey:"anothervalue"};
-    assert.deepEqual(expected,kvParser.parse("key  =value anotherkey  =\"anothervalue\""));
+    chai.deepInclude(expected,kvParser.parse("key  =value anotherkey  =\"anothervalue\""));
   });
 
   it("parse simple values with and without quotes and leading and trailing spaces on keys",function(){
     let expected={key:"value",anotherkey:"anothervalue"};
-    assert.deepEqual(expected,kvParser.parse("  key  =value anotherkey  = \"anothervalue\""));
+    chai.deepInclude(expected,kvParser.parse("  key  =value anotherkey  = \"anothervalue\""));
   });
 
   it("parse simple values with and without quotes(quoted values first)",function(){
