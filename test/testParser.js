@@ -193,7 +193,7 @@ describe("mixed values with both quotes and without",function(){
 
   it("parse simple values with and without quotes(quoted values first)",function(){
     let expected={key:"value",anotherkey:"anothervalue"};
-    assert.deepEqual(expected,kvParser.parse("anotherkey=\"anothervalue\" key=value"));
+    chai.deepInclude(expected,kvParser.parse("anotherkey=\"anothervalue\" key=value"));
   });
 });
 
@@ -205,62 +205,111 @@ const errorChecker=function(key,pos,typeOfError) {
     }
 }
 
+const checkErrorDetails = function(key,pos,message) {
+  return function(err){
+    return err.message == message && err.key==key && err.position==pos
+  }
+}
+
 describe("error handling",function(){
   beforeEach(function(){
     kvParser=new Parser();
   });
 
   it("throws error on missing value when value is unquoted",function(){
-    assert.throws(
+    chai.throws(
       () => {
         kvParser.parse("key=")
       },
-      errorChecker("key",3,MissingValueError))
+      MissingValueError()
+      )
+
+      try{
+        kvParser.parse("key=");
+      }catch(err){
+        chai.equal(err.key,"key");
+        chai.equal(err.position,3)
+      }
   });
 
   it("throws error on missing value when value is quoted",function(){
-    assert.throws(
+    chai.throws(
       () => {
         kvParser.parse("key=\"value")
       },
-      errorChecker("key",9,MissingEndQuoteError)
-    )
+      MissingEndQuoteError()
+      )
+
+      try{
+        kvParser.parse("key=\"value");
+      }catch(err){
+        chai.equal(err.key,"key");
+        chai.equal(err.position,9)
+      }
   });
 
   it("throws error on missing key",function(){
-    assert.throws(
+    chai.throws(
       () => {
-        var p=kvParser.parse("=value");
+        kvParser.parse("=value")
       },
-      errorChecker(undefined,0,MissingKeyError)
-    )
+      MissingKeyError()
+      )
+
+      try{
+        kvParser.parse("=value");
+      }catch(err){
+        chai.equal(err.key,undefined);
+        chai.equal(err.position,0)
+      }
   });
 
   it("throws error on invalid key",function(){
-    assert.throws(
+    chai.throws(
       () => {
-        var p=kvParser.parse("'foo'=value");
+        kvParser.parse("'foo'=value")
       },
-      errorChecker(undefined,0,MissingKeyError)
-    )
+      MissingKeyError()
+      )
+
+      try{
+        kvParser.parse("'foo'=value");
+      }catch(err){
+        chai.equal(err.key,undefined);
+        chai.equal(err.position,0)
+      }
   });
 
   it("throws error on missing assignment operator",function(){
-    assert.throws(
+    chai.throws(
       () => {
-        var p=kvParser.parse("key value");
+        kvParser.parse("key value")
       },
-      errorChecker(undefined,4,MissingAssignmentOperatorError)
-    )
+      MissingAssignmentOperatorError()
+      )
+
+      try{
+        kvParser.parse("key value");
+      }catch(err){
+        chai.equal(err.key,undefined);
+        chai.equal(err.position,4)
+      }
   });
 
   it("throws error on incomplete key value pair",function(){
-    assert.throws(
+    chai.throws(
       () => {
-        var p=kvParser.parse("key");
+        kvParser.parse("key")
       },
-      errorChecker(undefined,2,IncompleteKeyValuePairError)
-    )
+      IncompleteKeyValuePairError()
+      )
+
+      try{
+        kvParser.parse("key");
+      }catch(err){
+        chai.equal(err.key,undefined);
+        chai.equal(err.position,2)
+      }
   });
 
 });
