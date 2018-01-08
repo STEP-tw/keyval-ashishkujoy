@@ -13,6 +13,21 @@ describe("strict parser that is case insensitive",function(){
     let parsed=kvParser.parse("NAME=jayanth");
     assert.deepEqual(parsed,expected);
   });
+  it('should parse when specified keys are partially in lower case and actual is fully lower case',function(){
+    let kvParser = new StrictParser(['Name'],false);
+    let expected=new Parsed();
+    expected["name"]="jayanth";
+    let parsed=kvParser.parse("name=jayanth");
+    assert.deepEqual(parsed,expected);
+  });
+  it('should parse when actual keys are partially in lower case and specified keys is completely lower case',function(){
+    let kvParser = new StrictParser(['name','company'],false);
+    let expected=new Parsed();
+    expected["NaMe"]="jayanth";
+    expected["ComPany"]="thoughtworks";
+    let parsed=kvParser.parse("NaMe=jayanth ComPany=thoughtworks");
+    assert.deepEqual(parsed,expected);
+  })
 });
 
 describe("strict parser that is case sensitive",function(){
@@ -23,4 +38,10 @@ describe("strict parser that is case sensitive",function(){
       kvParser.parse("NAME=jayanth");
     })
   });
+  it("should throw error when specified keys are in upper case and actual is not",function(){
+    let kvParser=new StrictParser(["NAME"],true);
+    assert.throws(()=>{
+      kvParser.parse("name=jayanth");
+    })
+  })
 });

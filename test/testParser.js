@@ -14,6 +14,13 @@ const assertKeyAndPositionOfError = function(err,key,pos){
   chai.equal(err.position,pos);
 }
 
+const newError = function(errorMessage,key,pos){
+  let error = new Error();
+  error.key = key;
+  error.position = pos;
+  return error;
+}
+
 const assertKeyPosition = function(chai,errorFunct,key,pos){
   try{
     eval(errorFunct);
@@ -236,7 +243,6 @@ describe("error handling",function(){
       },
       MissingEndQuoteError()
       )
-      //let errExp = 'kvParser.parse("key=\"value")'
       try{
         kvParser.parse("key=\"value");
       }catch(err){
@@ -245,12 +251,6 @@ describe("error handling",function(){
   });
 
   it("throws error on missing key",function(){
-    // chai.throws(
-    //   () => {
-    //     kvParser.parse("=value")
-    //   },
-    //   MissingKeyError()
-    //   )
       let errExp = 'kvParser.parse("=value")';
       assertErrorInstance(chai,errExp,MissingKeyError);
       assertKeyPosition(chai,errExp,undefined,0);
@@ -272,7 +272,6 @@ describe("error handling",function(){
   });
 
   it("throws error on missing assignment operator",function(){
-
       let errExp = 'kvParser.parse("key value")';
       assertErrorInstance(chai,errExp,MissingAssignmentOperatorError);
       assertKeyPosition(chai,errExp,undefined,4);
