@@ -62,42 +62,42 @@ describe("parse digits and other special chars",function(){
 
   it("parse keys with a single digit",function(){
     let expected={'1':"value"};
-    assert.deepEqual(expected,kvParser.parse("1=value"));
+    chai.deepInclude(expected,kvParser.parse("1=value"));
   });
 
   it("parse keys with only multiple digits",function(){
     let expected={'123':"value"};
-    assert.deepEqual(expected,kvParser.parse("123=value"));
+    chai.deepInclude(expected,kvParser.parse("123=value"));
   });
 
   it("parse keys with leading 0s",function(){
     let expected={'0123':"value"};
-    assert.deepEqual(expected,kvParser.parse("0123=value"));
+    chai.deepInclude(expected,kvParser.parse("0123=value"));
   });
 
   it("parse keys with underscores",function(){
     let expected={'first_name':"value"};
-    assert.deepEqual(expected,kvParser.parse("first_name=value"));
+    chai.deepInclude(expected,kvParser.parse("first_name=value"));
   });
 
   it("parse keys with a single underscore",function(){
     let expected={'_':"value"};
-    assert.deepEqual(expected,kvParser.parse("_=value"));
+    chai.deepInclude(expected,kvParser.parse("_=value"));
   });
 
   it("parse keys with multiple underscores",function(){
     let expected={'__':"value"};
-    assert.deepEqual(expected,kvParser.parse("__=value"));
+    chai.deepInclude(expected,kvParser.parse("__=value"));
   });
 
   it("parse keys with alphabets and digits(digits leading)",function(){
     let expected={'0abc':"value"};
-    assert.deepEqual(expected,kvParser.parse("0abc=value"));
+    chai.deepInclude(expected,kvParser.parse("0abc=value"));
   });
 
   it("parse keys with alphabets and digits(alphabets leading)",function(){
     let expected={'a0bc':"value"};
-    assert.deepEqual(expected,kvParser.parse("a0bc=value"));
+    chai.deepInclude(expected,kvParser.parse("a0bc=value"));
   });
 });
 
